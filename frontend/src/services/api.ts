@@ -21,7 +21,7 @@ export default class API {
         return this.apiClient.post('/connections', connection);
     }
 
-    updateConnection(connection: IConnection): Promise<IConnection> {
-        return this.apiClient.put(`/connections/${connection.id}`, connection)
+    updateConnection(connectionId: string, connection: IConnection): Promise<IConnection> {
+        return this.apiClient.put(`/connections/${connectionId}`, connection)
     }
 }

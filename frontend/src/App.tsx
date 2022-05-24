@@ -1,43 +1,30 @@
-import { Button, Code } from '@mantine/core';
-import { useEffect } from 'react';
-import Initiator from './services/initiator';
-import useStore from './store';
-import { Text, Paper } from '@mantine/core';
+import React from 'react';
+import { Routes, Route, Outlet, Link } from "react-router-dom";
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Track from './pages/Track';
 
-function Device(connection: any) {
+function App() {
   return (
-    <Paper shadow="xs" p="md">
-      <Code block>{JSON.stringify(connection)}</Code>
-    </Paper>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="track/:id" element={<Track />} />
+        <Route path="*" element={<NoMatch />} />
+      </Route>
+    </Routes>
   );
 }
 
-function App() {
-  const intiated = useStore((state: any) => state.intiated);
-  const peerId = useStore((state: any) => state.peerId);
-  const offer = useStore((state: any) => state.offer);
-  const init = useStore((state: any) => state.init);
-  const connections = useStore((state: any) => state.connections);
-  const createConnection = useStore((state: any) => state.createConnection);
-
-  useEffect(() => {
-    console.log('init');
-    init(true);
-  }, []);
-
+function NoMatch() {
   return (
     <div>
-      <Code block>initated: {(intiated)? 'true' : 'false'} </Code>
-      <Code block>peerId: {peerId} </Code>
-      <Code block>{offer}</Code>
-      <hr></hr>
-      {connections.map((connection: any) =>
-        <Device key={connection.id} connection={connection}></Device>
-      )}
-      <Button onClick={createConnection}>Add Device</Button>
+      <h2>Nothing to see here!</h2>
+      <p>
+        <Link to="/">Go to the home page</Link>
+      </p>
     </div>
   );
 }
-
 
 export default App;
