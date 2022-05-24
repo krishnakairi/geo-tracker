@@ -24,6 +24,7 @@ export default class Peer {
         this.event.emit('created', this);
 
         this.peerInstance.on('connect', () => {
+            console.log('peer connected');
             this.event.emit('connect', this.peerInstance);
         })
     }

@@ -43,7 +43,7 @@ export default class Initiator extends Peer {
                     throw new Error('No answer found!')
                 }
                 this.answer = connection.answer;
-                this.signal(connection.answer, false);
+                this.signal({ sdp: connection.answer, type:'answer' }, false);
                 this.event.emit('accept', connection.answer);
             });
     }

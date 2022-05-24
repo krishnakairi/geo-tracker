@@ -11,7 +11,7 @@ const ConnectionSchema = new dynamoose.Schema({
 }, { timestamps: true });
 
 // auto delete connection items after 5 mins
-const TTL = 10 * 60
+const TTL = 60 * 60
 const expiresConfig = { 
     expires: { 
         ttl: TTL,

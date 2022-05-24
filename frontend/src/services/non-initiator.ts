@@ -17,9 +17,7 @@ export default class NonInitiator extends Peer {
     }
 
     public async acceptOffer(): Promise<string> {
-        console.log('accept offer')
-        const { sdp } = await this.signal(this.offer, true);
-        console.log('accept offer', sdp);
+        const { sdp } = await this.signal({ sdp: this.offer, type: 'offer' }, true);
         if (sdp === null) {
             throw new Error('Unable to request');
         }
