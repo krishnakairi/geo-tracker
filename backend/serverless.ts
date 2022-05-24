@@ -2,9 +2,10 @@ import type { AWS } from '@serverless/typescript';
 
 import createConnection from '@functions/createConnection';
 import getConnection from '@functions/getConnection';
+import updateConnection from '@functions/updateConnection';
 
 const serverlessConfiguration: AWS = {
-  service: 'backend',
+  service: 'backend', //[TODO] change stack name
   frameworkVersion: '3',
   plugins: ['serverless-esbuild'],
   provider: {
@@ -17,51 +18,28 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
-      COONECTIONS_TABLE: { Ref: 'ConnectionsTable' }
     },
     iamRoleStatements: [
       {
         Effect: 'Allow',
         Action: [
           'dynamodb:DescribeTable',
+          'dynamodb:CreateTable',
           'dynamodb:Query',
           'dynamodb:Scan',
           'dynamodb:GetItem',
           'dynamodb:PutItem',
           'dynamodb:UpdateItem',
-          'dynamodb:DeleteItem'
+          'dynamodb:DeleteItem',
+          'dynamodb:DescribeTimeToLive',
+          'dynamodb:UpdateTimeToLive'
         ],
-        Resource: [
-          { "Fn::GetAtt": ['ConnectionsTable', 'Arn'] }
-        ]
+        Resource: '*'
       }
     ]
   },
-  resources: {
-    Resources: {
-      ConnectionsTable: {
-        Type: 'AWS::DynamoDB::Table',
-        Properties: {
-          TableName: 'ConnectionsTable',
-          AttributeDefinitions: [
-            { AttributeName: 'id', AttributeType: 'S' },
-            { AttributeName: 'created_at', AttributeType: 'S' }
-          ],
-          KeySchema: [
-            { AttributeName: 'id', KeyType: 'HASH' },
-            { AttributeName: 'created_at', KeyType: 'RANGE' },
-          ],
-          BillingMode: 'PAY_PER_REQUEST',
-          TimeToLiveSpecification: {
-            AttributeName : 'expire_at',
-            Enabled : true
-          }          
-        }
-      }
-    }
-  },
   // import the function via paths
-  functions: { createConnection, getConnection },
+  functions: { createConnection, getConnection, updateConnection },
   package: { individually: true },
   custom: {
     esbuild: {

@@ -1,20 +1,16 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
-import { v4 as uuidv4 } from 'uuid';
 import Connections from './../../models/connection';
 import schema from './schema';
 
-const createConnection: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const { peerId, offer } = event.body;
-  const connectionId = uuidv4();
+const updateConnection: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+  const { answer } = event.body;
+  const { connectionId } = event.pathParameters;
   try {
-    const newConnection = new Connections({
-      id: connectionId,
-      peerId: peerId,
-      offer: offer
-    });
-    await newConnection.save()
+    const connection = await Connections.get(connectionId);
+    connection.answer = answer;
+    await connection.save()
     return formatJSONResponse({ connectionId, status: true, error: null });
   } catch (error) {
     console.error(error);
@@ -25,4 +21,4 @@ const createConnection: ValidatedEventAPIGatewayProxyEvent<typeof schema> = asyn
   }
 };
 
-export const main = middyfy(createConnection);
+export const main = middyfy(updateConnection);

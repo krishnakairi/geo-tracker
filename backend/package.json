@@ -12,6 +12,7 @@
   "dependencies": {
     "@middy/core": "^2.5.3",
     "@middy/http-json-body-parser": "^2.5.3",
+    "dynamoose": "^2.8.5",
     "unix-timestamp": "^1.0.2",
     "uuid": "^8.3.2"
   },

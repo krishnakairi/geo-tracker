@@ -16,9 +16,7 @@ export interface IPeerConfig {
 
 export interface IConnection {
     id?: string;
+    peerId?: string;
     offer?: string;
     answer?: string;
-    peerId?: string;
-    created_at?: string;
-    expire_at?: string;
 }
